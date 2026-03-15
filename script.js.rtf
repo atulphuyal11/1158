@@ -1,0 +1,155 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 // ===== Smooth Page Load Animation =====\
+document.addEventListener('DOMContentLoaded', () => \{\
+    // Preloader animation\
+    setTimeout(() => \{\
+        document.body.classList.add('loaded');\
+    \}, 1500);\
+\
+    // Initialize animations\
+    initializeScrollAnimations();\
+    initializeHoverEffects();\
+\});\
+\
+// ===== Enter Apartment Function =====\
+function enterApartment() \{\
+    const btn = document.querySelector('.enter-btn');\
+    \
+    // Button click animation\
+    btn.style.animation = 'none';\
+    setTimeout(() => \{\
+        btn.style.animation = '';\
+    \}, 10);\
+\
+    // Smooth transition to members page\
+    document.body.style.opacity = '0';\
+    document.body.style.transition = 'opacity 0.5s ease-out';\
+\
+    setTimeout(() => \{\
+        window.location.href = 'members.html';\
+    \}, 500);\
+\}\
+\
+// ===== Scroll Animations =====\
+function initializeScrollAnimations() \{\
+    const observerOptions = \{\
+        threshold: 0.1,\
+        rootMargin: '0px 0px -100px 0px'\
+    \};\
+\
+    const observer = new IntersectionObserver((entries) => \{\
+        entries.forEach(entry => \{\
+            if (entry.isIntersecting) \{\
+                entry.target.classList.add('visible');\
+                observer.unobserve(entry.target);\
+            \}\
+        \});\
+    \}, observerOptions);\
+\
+    // Observe all cards and animated elements\
+    document.querySelectorAll('.member-card, .welcome-header').forEach(el => \{\
+        observer.observe(el);\
+    \});\
+\}\
+\
+// ===== Hover Effects =====\
+function initializeHoverEffects() \{\
+    const cards = document.querySelectorAll('.member-card');\
+    \
+    cards.forEach(card => \{\
+        card.addEventListener('mouseenter', function() \{\
+            // Parallax effect\
+            this.style.cursor = 'pointer';\
+        \});\
+\
+        card.addEventListener('mousemove', function(e) \{\
+            const rect = this.getBoundingClientRect();\
+            const x = e.clientX - rect.left;\
+            const y = e.clientY - rect.top;\
+            \
+            const centerX = rect.width / 2;\
+            const centerY = rect.height / 2;\
+            \
+            const rotateX = (y - centerY) / 10;\
+            const rotateY = (centerX - x) / 10;\
+            \
+            this.style.transform = `perspective(1000px) rotateX($\{rotateX\}deg) rotateY($\{rotateY\}deg) translateY(-10px)`;\
+        \});\
+\
+        card.addEventListener('mouseleave', function() \{\
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';\
+            this.style.transition = 'transform 0.3s cubic-bezier(0.23, 1, 0.320, 1)';\
+        \});\
+    \});\
+\}\
+\
+// ===== Navigation Active Links =====\
+function setActiveNavLink() \{\
+    const navLinks = document.querySelectorAll('.nav-link');\
+    const currentLocation = location.pathname.split('/').pop() || 'index.html';\
+\
+    navLinks.forEach(link => \{\
+        const href = link.getAttribute('href');\
+        if (href === currentLocation || (currentLocation === '' && href === 'index.html')) \{\
+            link.classList.add('active');\
+        \} else \{\
+            link.classList.remove('active');\
+        \}\
+    \});\
+\}\
+\
+// ===== Smooth Scrolling for Navigation =====\
+document.querySelectorAll('a[href^="#"]').forEach(anchor => \{\
+    anchor.addEventListener('click', function(e) \{\
+        const href = this.getAttribute('href');\
+        if (href !== '#' && document.querySelector(href)) \{\
+            e.preventDefault();\
+            document.querySelector(href).scrollIntoView(\{\
+                behavior: 'smooth',\
+                block: 'start'\
+            \});\
+        \}\
+    \});\
+\});\
+\
+// ===== Parallax Effect on Scroll =====\
+window.addEventListener('scroll', () => \{\
+    const scrollY = window.pageYOffset;\
+    const shapes = document.querySelectorAll('.shape');\
+    \
+    shapes.forEach((shape, index) => \{\
+        const speed = 0.5 + (index * 0.1);\
+        shape.style.transform = `translateY($\{scrollY * speed\}px)`;\
+    \});\
+\});\
+\
+// ===== Mouse Cursor Effect =====\
+document.addEventListener('mousemove', (e) => \{\
+    const x = e.clientX;\
+    const y = e.clientY;\
+\
+    // You can add custom cursor effects here if needed\
+\});\
+\
+// ===== Page Transition Animation =====\
+window.addEventListener('pageshow', (event) => \{\
+    document.body.style.opacity = '1';\
+\});\
+\
+// ===== Accessibility =====\
+document.querySelectorAll('button').forEach(btn => \{\
+    btn.addEventListener('keypress', (e) => \{\
+        if (e.key === 'Enter' || e.key === ' ') \{\
+            btn.click();\
+        \}\
+    \});\
+\});\
+\
+// ===== Initialization =====\
+setActiveNavLink();}
